@@ -8,6 +8,7 @@ public class Robots {
     public static void main(String[] args) {
         simple();
         followLine();
+        //park();
     }
     
     private static void simple() {
@@ -43,5 +44,29 @@ public class Robots {
     
     private static boolean onTape(int value, int floor, int tape) {
         return Math.abs(floor - value) > Math.abs(tape - value);
+    }
+    
+    private static void park() {
+        System.out.println("Trying to park");
+        int startDistance = ultra.getDistance();
+        while(true) {
+            if (goAndCheckForParkingSpot(5, startDistance)) {
+                if (goAndCheckForParkingSpot(15, startDistance) && goAndCheckForParkingSpot(15, startDistance)) {
+                    System.out.println("Parking spot found!");
+                    int distance = ultra.getDistance();
+                    pilot.travel(-20);
+                    pilot.steer(-90);
+                    pilot.travel(distance - 10);
+                    break;
+                }
+            }
+        }
+        
+        System.out.println("Parking complete.");
+    }
+    
+    private static boolean goAndCheckForParkingSpot(int distance, int startDistance) {
+        pilot.travel(distance);
+        return startDistance - ultra.getDistance() >= 40;
     }
 }
